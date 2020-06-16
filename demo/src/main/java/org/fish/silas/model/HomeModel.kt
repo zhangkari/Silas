@@ -10,6 +10,7 @@ import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
 
 class HomeModel(private val adapter: HomeContract.HomeAdapter) : HomeContract.IModel {
+
     private val dish: List<ProductEntity> = listOf(
             ProductEntity("1011", null, "回锅肉", 1650, "http://image1.qianqianhua.com/uploads/20180717/11/1531798229-HPlZKeCVsx.jpg"),
             ProductEntity("2011", null, "水煮肉片", 2500, "http://n.sinaimg.cn/sinacn19/280/w1740h940/20180718/4a58-hfnsvza2815326.jpg"),
@@ -43,12 +44,12 @@ class HomeModel(private val adapter: HomeContract.HomeAdapter) : HomeContract.IM
     private fun loadProducts(listener: OnResultListener<List<ProductEntity>>) {
         thread(start = true, isDaemon = false, contextClassLoader = null, name = "LoadProductsThread", priority = -1) {
             val list = ArrayList(dish)
-            Thread.sleep(2000)
+            Thread.sleep(1000)
             listener.onSuccess(list)
         }
     }
 
-    override fun subtract(id: String, listener: OnResultListener<Boolean>) {
+    override fun removeShoppingCart(id: String, listener: OnResultListener<Boolean>) {
         val dish = findDishById(id, checked)
         if (dish == null) {
             listener.onSuccess(false)
@@ -58,7 +59,7 @@ class HomeModel(private val adapter: HomeContract.HomeAdapter) : HomeContract.IM
         }
     }
 
-    override fun addDish(id: String, listener: OnResultListener<Boolean>) {
+    override fun addShoppingCart(id: String, listener: OnResultListener<Boolean>) {
         val dish = findDishById(id, dish)
         if (dish == null) {
             listener.onSuccess(false)
@@ -90,7 +91,7 @@ class HomeModel(private val adapter: HomeContract.HomeAdapter) : HomeContract.IM
             for (item in checked) {
                 total += item.price
             }
-            Thread.sleep(2000)
+            Thread.sleep(1000)
             listener.onSuccess(total)
         }
     }
@@ -122,7 +123,7 @@ class HomeModel(private val adapter: HomeContract.HomeAdapter) : HomeContract.IM
 
     private fun payReal(listener: OnResultListener<Boolean>) {
         thread(true, isDaemon = false, contextClassLoader = null, name = "PayThread", priority = -1) {
-            Thread.sleep(2000)
+            Thread.sleep(1000)
             calculate(object : OnResultListener<Long> {
                 override fun onSuccess(t: Long) {
                     listener.onSuccess(true)
@@ -135,7 +136,12 @@ class HomeModel(private val adapter: HomeContract.HomeAdapter) : HomeContract.IM
         }
     }
 
-    override fun reset(listener: OnResultListener<Void>) {
+    override fun resetShoppingCart(listener: OnResultListener<Boolean>) {
         checked.clear()
+        listener.onSuccess(true)
+    }
+
+    override fun getCheckedDishCount(): Int {
+        return checked.size
     }
 }

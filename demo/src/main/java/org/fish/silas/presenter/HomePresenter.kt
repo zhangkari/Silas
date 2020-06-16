@@ -5,6 +5,7 @@ import org.fish.silas.data.vm.VMSingleDish
 import org.fish.silas.model.OnResultListener
 
 class HomePresenter(private var view: HomeContract.IView?, private val model: HomeContract.IModel) : HomeContract.IPresenter {
+
     override fun loadProducts() {
         view?.showLoading()
         model.getProducts(object : OnResultListener<List<VMSingleDish>> {
@@ -20,13 +21,13 @@ class HomePresenter(private var view: HomeContract.IView?, private val model: Ho
         })
     }
 
-    override fun addProduct(id: String) {
+    override fun addShoppingCart(id: String) {
         view?.showLoading()
-        model.addDish(id, object : OnResultListener<Boolean> {
+        model.addShoppingCart(id, object : OnResultListener<Boolean> {
             override fun onSuccess(t: Boolean) {
                 if (!t) {
                     view?.dismissLoading()
-                    view?.showError(500, "Add dish failed")
+                    view?.showError(500, "添加到购物车失败")
                     return
                 }
 
@@ -50,13 +51,13 @@ class HomePresenter(private var view: HomeContract.IView?, private val model: Ho
         })
     }
 
-    override fun removeProduct(id: String) {
+    override fun removeShoppingCart(id: String) {
         view?.showLoading()
-        model.subtract(id, object : OnResultListener<Boolean> {
+        model.removeShoppingCart(id, object : OnResultListener<Boolean> {
             override fun onSuccess(t: Boolean) {
                 if (!t) {
                     view?.dismissLoading()
-                    view?.showError(500, "Subtract dish failed")
+                    view?.showError(500, "移除购物车失败")
                     return
                 }
 
@@ -87,9 +88,14 @@ class HomePresenter(private var view: HomeContract.IView?, private val model: Ho
                 view?.dismissLoading()
                 view?.showPayResult(t)
 
-                model.reset(object : OnResultListener<Void> {
-                    override fun onSuccess(t: Void) {
+                model.resetShoppingCart(object : OnResultListener<Boolean> {
+                    override fun onSuccess(t: Boolean) {
                         view?.dismissLoading()
+                        if (t) {
+                            loadProducts()
+                        } else {
+                            view?.showError(100, "清空购物车失败")
+                        }
                     }
 
                     override fun onError(code: Int, message: String) {
@@ -108,5 +114,9 @@ class HomePresenter(private var view: HomeContract.IView?, private val model: Ho
 
     override fun destroy() {
         view = null
+    }
+
+    override fun getDishCount(): Int {
+        return model.getCheckedDishCount()
     }
 }

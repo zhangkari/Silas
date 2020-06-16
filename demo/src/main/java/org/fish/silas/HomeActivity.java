@@ -13,7 +13,6 @@ import org.fish.silas.data.vm.VMSingleDish;
 import org.fish.silas.model.HomeAdapterImpl;
 import org.fish.silas.model.HomeModel;
 import org.fish.silas.presenter.HomePresenter;
-import org.fish.silas.utils.Counters;
 import org.fish.silas.utils.EventHubs;
 import org.fish.silas.utils.Formats;
 import org.fish.silas.viewbinder.SingleDishVBinder;
@@ -55,8 +54,14 @@ public class HomeActivity extends ZygoteActivity implements HomeContract.IView {
             @Override
             public void onClick(View v) {
                 presenter.pay();
+                // todo
+                // showCouponDialog();
             }
         });
+    }
+
+    private void showCouponDialog() {
+        CouponDialog.show(getSupportFragmentManager());
     }
 
     @Override
@@ -96,27 +101,26 @@ public class HomeActivity extends ZygoteActivity implements HomeContract.IView {
     public void onEvent(DishClickEvent event) {
         switch (event.getAction()) {
             case DishClickEventKt.ADD_CLICK:
-                Counters.INSTANCE.increase();
-                presenter.addProduct(event.getId());
+                presenter.addShoppingCart(event.getId());
                 refreshCheckoutStatus();
                 break;
 
             case DishClickEventKt.SUBTRACT_CLICK:
-                Counters.INSTANCE.decrease();
-                presenter.removeProduct(event.getId());
+                presenter.removeShoppingCart(event.getId());
                 refreshCheckoutStatus();
                 break;
         }
     }
 
     private void refreshCheckoutStatus() {
-        pieces.find(R.id.tv_checkout).setEnabled(Counters.INSTANCE.getCount() > 0);
+        pieces.find(R.id.tv_checkout).setEnabled(presenter.getDishCount() > 0);
     }
 
     @Override
     public void showPayResult(boolean success) {
         if (success) {
             showToast("支付成功");
+            showPayAmount(0);
         } else {
             showToast("支付失败");
         }

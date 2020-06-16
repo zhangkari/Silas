@@ -17,8 +17,9 @@ interface HomeContract {
 
     interface IPresenter {
         fun loadProducts()
-        fun addProduct(id: String)
-        fun removeProduct(id: String)
+        fun addShoppingCart(id: String)
+        fun removeShoppingCart(id: String)
+        fun getDishCount(): Int
         fun pay()
         fun destroy()
     }
@@ -26,11 +27,12 @@ interface HomeContract {
     interface IModel {
         fun getProducts(listener: OnResultListener<List<VMSingleDish>>)
         fun getComboProducts(id: String, listener: OnResultListener<ProductEntity>)
-        fun addDish(id: String, listener: OnResultListener<Boolean>)
-        fun subtract(id: String, listener: OnResultListener<Boolean>)
+        fun addShoppingCart(id: String, listener: OnResultListener<Boolean>)
+        fun removeShoppingCart(id: String, listener: OnResultListener<Boolean>)
         fun calculateAmount(listener: OnResultListener<Long>)
         fun pay(listener: OnResultListener<Boolean>)
-        fun reset(listener: OnResultListener<Void>)
+        fun resetShoppingCart(listener: OnResultListener<Boolean>)
+        fun getCheckedDishCount(): Int
     }
 
     interface HomeAdapter : Adapter<List<ProductEntity>, List<VMSingleDish>>
