@@ -51,6 +51,8 @@ class PaySuccessDialog : ZygoteDialog() {
     }
 
     override fun init() {
+        setTitle("支付成功")
+
         val result: VMPaySuccess = arguments!!.getSerializable("result") as VMPaySuccess
 
         rootView.findViewById<TextView>(R.id.tv_order_amount).text = Formats.formatCurrency(result.orderAmount / 100.0)

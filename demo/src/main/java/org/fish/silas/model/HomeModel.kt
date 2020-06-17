@@ -17,7 +17,7 @@ import kotlin.concurrent.thread
 class HomeModel(private val dishAdapter: HomeContract.DishAdapter, private val couponAdapter: HomeContract.CouponAdapter) : HomeContract.IModel {
 
     private val dish: List<ProductEntity> = listOf(
-            ProductEntity("1011", null, "回锅肉", 1650, "http://image1.qianqianhua.com/uploads/20180717/11/1531798229-HPlZKeCVsx.jpg"),
+            ProductEntity("1011", null, "回锅肉", 1650, "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3097672361,2403365442&fm=26&gp=0.jpg"),
             ProductEntity("1012", null, "水煮肉片", 2500, "http://n.sinaimg.cn/sinacn19/280/w1740h940/20180718/4a58-hfnsvza2815326.jpg"),
             ProductEntity("1013", null, "西湖醋鱼", 4550, "http://5b0988e595225.cdn.sohucs.com/images/20180102/d9464cbc75ed40aa82f0758f8cdca9de.jpeg")
     )
