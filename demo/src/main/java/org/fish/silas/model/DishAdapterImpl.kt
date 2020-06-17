@@ -4,7 +4,7 @@ import org.fish.silas.contract.HomeContract
 import org.fish.silas.data.entity.ProductEntity
 import org.fish.silas.data.vm.VMSingleDish
 
-class HomeAdapterImpl : HomeContract.HomeAdapter {
+class DishAdapterImpl : HomeContract.DishAdapter {
     override fun adapt(src: List<ProductEntity>): List<VMSingleDish> {
         if (src.isEmpty()) {
             return ArrayList()

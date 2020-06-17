@@ -30,22 +30,12 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/tv_currency_symbol"
+            android:id="@+id/tv_order_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
             android:layout_toEndOf="@id/tv_label_amount"
-            android:text="@string/currency_symbol"
-            android:textColor="#f11"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_order_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/tv_currency_symbol"
             android:text="0.00"
             android:textColor="#f11"
             android:textSize="16sp" />

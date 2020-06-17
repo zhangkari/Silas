@@ -45,6 +45,6 @@ class SingleDishVBinder : ViewBinder<VMSingleDish>(R.layout.vb_single_dish) {
 
         setText(R.id.tv_dish_name, data.name)
         setText(R.id.tv_dish_count, data.count.toString())
-        setText(R.id.tv_dish_price, "￥" + Formats.formatAmount(data.price / 100.0))
+        setText(R.id.tv_dish_price, Formats.formatCurrency(data.price / 100.0))
     }
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.Toolbar;
@@ -36,17 +37,28 @@ public class ZygoteDialog extends DialogFragment {
         if (layoutId != 0) {
             View.inflate(getContext(), layoutId, (ViewGroup) rootView.findViewById(R.id.layout_content));
         }
+
+
         init();
     }
 
     private void initToolbar() {
         toolbar = rootView.findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_close);
-        toolbar.inflateMenu(getMenuLayout());
+        int menuId = getMenuLayout();
+        if (menuId != 0) {
+            toolbar.inflateMenu(menuId);
+        }
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 return onMenuClick(item);
+            }
+        });
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onNavigationClick();
             }
         });
     }
@@ -66,7 +78,7 @@ public class ZygoteDialog extends DialogFragment {
     }
 
     protected void resetStyle() {
-
+        setCancelable(false);
     }
 
     protected void setTitle(@StringRes int resId) {
@@ -78,14 +90,30 @@ public class ZygoteDialog extends DialogFragment {
     }
 
     protected boolean onMenuClick(MenuItem menu) {
-        if (menu.getItemId() == android.R.id.home) {
-            dismiss();
-            return true;
-        }
         return false;
+    }
+
+    protected void onNavigationClick() {
+        dismiss();
     }
 
     protected void init() {
 
+    }
+
+    protected void showProgress() {
+        rootView.findViewById(R.id.layout_progress).setVisibility(View.VISIBLE);
+    }
+
+    protected void hideProgress() {
+        rootView.findViewById(R.id.layout_progress).setVisibility(View.GONE);
+    }
+
+    protected void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    protected void showToast(int resId) {
+        Toast.makeText(getContext(), resId, Toast.LENGTH_SHORT).show();
     }
 }

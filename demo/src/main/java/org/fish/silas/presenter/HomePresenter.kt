@@ -1,6 +1,8 @@
 package org.fish.silas.presenter
 
 import org.fish.silas.contract.HomeContract
+import org.fish.silas.data.vm.VMCoupon
+import org.fish.silas.data.vm.VMPaySuccess
 import org.fish.silas.data.vm.VMSingleDish
 import org.fish.silas.model.OnResultListener
 
@@ -81,10 +83,10 @@ class HomePresenter(private var view: HomeContract.IView?, private val model: Ho
         })
     }
 
-    override fun pay() {
+    override fun pay(coupons: List<String>?) {
         view?.showLoading()
-        model.pay(object : OnResultListener<Boolean> {
-            override fun onSuccess(t: Boolean) {
+        model.pay(coupons, object : OnResultListener<VMPaySuccess> {
+            override fun onSuccess(t: VMPaySuccess) {
                 view?.dismissLoading()
                 view?.showPayResult(t)
 
@@ -118,5 +120,20 @@ class HomePresenter(private var view: HomeContract.IView?, private val model: Ho
 
     override fun getDishCount(): Int {
         return model.getCheckedDishCount()
+    }
+
+    override fun loadCoupons() {
+        view?.showLoading()
+        model.getCoupons(object : OnResultListener<List<VMCoupon>> {
+            override fun onSuccess(t: List<VMCoupon>) {
+                view?.dismissLoading()
+                view?.showCoupons(t)
+            }
+
+            override fun onError(code: Int, message: String) {
+                view?.dismissLoading()
+                view?.showError(code, message)
+            }
+        })
     }
 }

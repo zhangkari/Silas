@@ -3,16 +3,22 @@ package org.fish.silas;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.fish.silas.contract.HomeContract;
+import org.fish.silas.data.event.CouponCheckedEvent;
 import org.fish.silas.data.event.DishClickEvent;
 import org.fish.silas.data.event.DishClickEventKt;
+import org.fish.silas.data.vm.VMCoupon;
+import org.fish.silas.data.vm.VMPaySuccess;
 import org.fish.silas.data.vm.VMSingleDish;
-import org.fish.silas.model.HomeAdapterImpl;
+import org.fish.silas.model.CouponAdapterImpl;
+import org.fish.silas.model.DishAdapterImpl;
 import org.fish.silas.model.HomeModel;
 import org.fish.silas.presenter.HomePresenter;
+import org.fish.silas.utils.Collections;
 import org.fish.silas.utils.EventHubs;
 import org.fish.silas.utils.Formats;
 import org.fish.silas.viewbinder.SingleDishVBinder;
@@ -32,7 +38,7 @@ public class HomeActivity extends ZygoteActivity implements HomeContract.IView {
         initAdapter();
         setupListener();
         EventHubs.INSTANCE.registerClickReceiver(this);
-        presenter = new HomePresenter(this, new HomeModel(new HomeAdapterImpl()));
+        presenter = new HomePresenter(this, new HomeModel(new DishAdapterImpl(), new CouponAdapterImpl()));
         presenter.loadProducts();
     }
 
@@ -53,21 +59,15 @@ public class HomeActivity extends ZygoteActivity implements HomeContract.IView {
         pieces.find(R.id.tv_checkout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.pay();
-                // todo
-                // showCouponDialog();
+                presenter.loadCoupons();
             }
         });
-    }
-
-    private void showCouponDialog() {
-        CouponDialog.show(getSupportFragmentManager());
     }
 
     @Override
     public void showPayAmount(long amount) {
         TextView textView = pieces.find(R.id.tv_order_amount);
-        textView.setText(Formats.INSTANCE.formatAmount(amount / 100.0));
+        textView.setText(Formats.INSTANCE.formatCurrency(amount / 100.0));
     }
 
     @Override
@@ -112,17 +112,35 @@ public class HomeActivity extends ZygoteActivity implements HomeContract.IView {
         }
     }
 
+    @Subscribe
+    public void onEvent(CouponCheckedEvent event) {
+        presenter.pay(event.getCoupons());
+    }
+
     private void refreshCheckoutStatus() {
         pieces.find(R.id.tv_checkout).setEnabled(presenter.getDishCount() > 0);
     }
 
     @Override
-    public void showPayResult(boolean success) {
-        if (success) {
-            showToast("支付成功");
+    public void showPayResult(@NonNull VMPaySuccess result) {
+        if (result.getSuccess()) {
             showPayAmount(0);
+            PaySuccessDialog.Companion.show(getSupportFragmentManager(), result);
         } else {
             showToast("支付失败");
+        }
+    }
+
+    private void showCouponDialog(List<VMCoupon> coupons) {
+        CouponDialog.show(getSupportFragmentManager(), coupons);
+    }
+
+    @Override
+    public void showCoupons(@NotNull List<VMCoupon> coupons) {
+        if (Collections.isEmpty(coupons)) {
+            presenter.pay(null);
+        } else {
+            showCouponDialog(coupons);
         }
     }
 }

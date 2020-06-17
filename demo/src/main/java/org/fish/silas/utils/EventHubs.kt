@@ -1,6 +1,7 @@
 package org.fish.silas.utils
 
 import org.fish.silas.data.event.ADD_CLICK
+import org.fish.silas.data.event.CouponCheckedEvent
 import org.fish.silas.data.event.DishClickEvent
 import org.fish.silas.data.event.SUBTRACT_CLICK
 import org.greenrobot.eventbus.EventBus
@@ -20,5 +21,9 @@ object EventHubs {
 
     fun postSubtractDishEvent(id: String) {
         EventBus.getDefault().post(DishClickEvent(SUBTRACT_CLICK, id))
+    }
+
+    fun postCheckCouponEvent(list: List<String>) {
+        EventBus.getDefault().post(CouponCheckedEvent(list))
     }
 }
