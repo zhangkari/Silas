@@ -1,1 +1,1 @@
-include ':demo', ':silas'
+include ':demo', ':silas', ':silasRuneCompiler', ':silasRune'

@@ -1,4 +1,4 @@
-package org.karic.silas.annotation;
+package org.fish.silas;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -16,7 +16,7 @@ public @interface Rune {
 
     String childMatchedId();
 
-    String childUnmatchId();
+    String childMismatchId();
 
     String childExceptionId();
 

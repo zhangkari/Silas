@@ -4,7 +4,7 @@ class NodeWrapper extends Node {
     String id;
     String nextMatchId;
     String nextErrorId;
-    String nextExeceptionId;
+    String nextExceptionId;
 
     Node currentNode;
     NodeWrapper nextMatch;

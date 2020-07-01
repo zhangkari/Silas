@@ -1,6 +1,6 @@
 package org.karic.silas.core;
 
-import org.karic.silas.annotation.Rune;
+import org.fish.silas.Rune;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,8 +31,8 @@ public class NodeHandlerChain implements HandlerChain {
             nodes.add(wrapper);
             wrapper.id = rune.id();
             wrapper.nextMatchId = rune.childMatchedId();
-            wrapper.nextErrorId = rune.childUnmatchId();
-            wrapper.nextExeceptionId = rune.childExceptionId();
+            wrapper.nextErrorId = rune.childMismatchId();
+            wrapper.nextExceptionId = rune.childExceptionId();
             wrapper.groupSequence = rune.groupSequence();
             if (rune.sequence() == -1) {
                 wrapper.sequence = i;
