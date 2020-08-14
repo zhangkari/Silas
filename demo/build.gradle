@@ -43,8 +43,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation project(path: ':silas')
-    implementation project(path: ':silasRune')
-
     annotationProcessor project(path: ':silasRuneCompiler')
 }
 

@@ -1,23 +1,25 @@
 package org.karic.silas.core;
 
-public abstract class Node {
-    public void init() {
+public interface Node<Model extends Contract.IModel, View extends Contract.IView, Presenter extends Contract.IPresenter> {
+    void init();
 
-    }
+    boolean isMatch();
 
-    public void run() {
+    void onMatch();
 
-    }
+    void onMismatch();
 
-    public boolean isMatch() {
-        return false;
-    }
+    void onException();
 
-    public void onError() {
+    void registerView(View view);
 
-    }
+    void registerPresenter(Presenter presenter);
 
-    public void onException() {
+    void registerModel(Model model);
 
-    }
+    View getView();
+
+    Presenter getPresenter();
+
+    Model getModel();
 }

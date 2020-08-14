@@ -14,13 +14,13 @@ public @interface Rune {
 
     int sequence() default -1;
 
-    String childMatchedId();
+    String childMatchedId() default "";
 
-    String childMismatchId();
+    String childMismatchId() default "";
 
-    String childExceptionId();
+    String childExceptionId() default "";
 
-    String group();
+    String group() default "";
 
     int groupSequence() default -1;
 }
